@@ -9,3 +9,4 @@ yarn-error.lo
 
 # build
 .nuxt
+dist
