@@ -14,3 +14,4 @@ dist
 
 # Coverage directory used by tools like istanbul
 coverage
+__snapshots__
