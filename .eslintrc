@@ -1,13 +1,20 @@
 {
-	"env": {
-		"jest": true
-	},
-	"root": true,
-	"parser": "@typescript-eslint/parser",
-	"plugins": ["@typescript-eslint", "prettier"],
-	"extends": ["plugin:prettier/recommended", "plugin:@typescript-eslint/recommended"],
-	"rules": {
-		"prettier/prettier": 0,
-		"comma-dangle": "warn"
-	}
+  "env": {
+    "jest": true
+  },
+  "root": true,
+  "parser": "vue-eslint-parser",
+  "parserOptions": {
+    "parser": "@typescript-eslint/parser"
+  },
+  "plugins": ["@typescript-eslint", "prettier"],
+  "extends": [
+    "plugin:vue/base",
+    "plugin:prettier/recommended",
+    // "plugin:vue/vue3-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "rules": {
+    "comma-dangle": "off"
+  }
 }
