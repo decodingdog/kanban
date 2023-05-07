@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ErrorLayout Mathced Snapshot 1`] = `
+"<v-app-stub dark="true" id="app">
+  <h1>
+    404 Not Found
+  </h1>
+  <nuxtlink to="/"> Home page </nuxtlink>
+</v-app-stub>"
+`;
