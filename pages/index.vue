@@ -1,104 +1,131 @@
 <template>
   <v-row fluid :style="{ flexWrap: 'nowrap', overflowX: 'scroll' }">
     <v-col
-      v-for="status in statusList"
-      :key="status.statusNm"
+      v-for="state in stateList"
+      :key="state.stateId"
       cols="12"
       sm="4"
       md="3"
       class="mt-5 mx-2 pa-0"
     >
-      <v-card color="#EEEEEE" class="pa-2">
-        <v-card-title :style="{ color: '#878787' }">
-          <span>{{ status.statusNm }}</span>
-          <v-spacer />
-          <v-icon @click="delStatus">mdi-close</v-icon>
-        </v-card-title>
-        <v-btn
-          :style="{
-            width: '100%',
-            backgroundColor: 'initial',
-            boxShadow: 'none',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }"
-          @click="addTask"
-        >
-          <v-icon>mdi-add</v-icon>
-          <span>Add task</span>
-        </v-btn>
-        <v-card
-          v-for="task in status.tasks"
-          :key="`${status.statusNm}_${task.taskId}`"
-          class="my-2"
-        >
-          <v-card-title>{{ task.title }}</v-card-title>
-        </v-card>
-      </v-card>
+      <StateCard
+        :state="state"
+        @on-selected-item="onSelectedItem"
+        @on-change-state="onChangeState"
+      />
     </v-col>
+    <v-col>
+      <button @click="openStateFormModal">
+        <v-icon>mdi-plus-circle</v-icon>
+      </button>
+    </v-col>
+    <StateFormModal
+      :visible="stateFormModal.visible"
+      @on-dismiss="closeStateFormModal"
+      @on-complete="completeStateFormModal"
+    />
   </v-row>
 </template>
 
 <script lang="ts">
-import { ref } from "vue";
+import { reactive, ref } from "vue";
 
-interface Task {
-  taskId: number;
-  statusId: number;
-  title: string;
-  cn: string;
-  registDt: string;
-}
-
-interface Status {
-  statusId: number;
-  statusNm: string;
-  tasks: Task[];
-}
+import { State, Task } from "~/types";
+import StateCard from "~/components/common/StateCard.vue";
+import FormModal from "~/components/common/FormModal.vue";
+import StateFormModal from "~/components/common/StateFormModal.vue";
 
 export default {
   setup() {
-    const statusList = ref<Status[]>([
+    const selectedItem = ref<Task | null>(null);
+    const stateList = ref<State[]>([
       {
-        statusId: 0,
-        statusNm: "Todo",
+        stateId: 0,
+        stateNm: "Todo",
         tasks: [
           {
             taskId: 0,
-            statusId: 0,
-            title: "dd",
-            cn: "dd",
+            stateId: 0,
+            title: "안녕하세요",
+            cn: "안녕하세요.....",
+            registDt: "2022-03-10",
+          },
+          {
+            taskId: 1,
+            stateId: 0,
+            title: "안녕하세요",
+            cn: "안녕하세요.....",
             registDt: "2022-03-10",
           },
         ],
       },
       {
-        statusId: 1,
-        statusNm: "In progress",
+        stateId: 1,
+        stateNm: "In progress",
         tasks: [],
       },
       {
-        statusId: 2,
-        statusNm: "Done",
+        stateId: 2,
+        stateNm: "Done",
         tasks: [],
       },
       {
-        statusId: 3,
-        statusNm: "Test",
+        stateId: 3,
+        stateNm: "Test",
         tasks: [],
       },
     ]);
+    const stateFormModal = reactive<{ visible: boolean }>({ visible: false });
 
-    const delStatus = () => {
-      console.log("delete status");
+    const onSelectedItem = (task: Task) => {
+      selectedItem.value = task;
     };
 
-    const addTask = () => {
-      console.log("add task");
+    const onChangeState = (nextStateId: number) => {
+      if (selectedItem.value?.stateId === nextStateId) return;
+
+      stateList.value = stateList.value.map((state: State) => {
+        let tasks = state.tasks;
+
+        if (selectedItem.value?.stateId === state.stateId) {
+          tasks = state.tasks.filter(
+            (task: Task) => selectedItem.value?.taskId !== task.taskId
+          );
+        } else if (nextStateId === state.stateId) {
+          tasks = [
+            ...state.tasks,
+            { ...selectedItem.value, stateId: state.stateId } as Task,
+          ];
+        }
+
+        return { ...state, tasks };
+      });
+      selectedItem.value = null;
     };
 
-    return { statusList, delStatus, addTask };
+    const openStateFormModal = () => {
+      stateFormModal.visible = true;
+    };
+
+    const completeStateFormModal = () => {
+      // refresh state list
+    };
+
+    const closeStateFormModal = () => {
+      stateFormModal.visible = false;
+    };
+
+    return {
+      stateList,
+      stateFormModal,
+      onChangeState,
+      onSelectedItem,
+      openStateFormModal,
+      completeStateFormModal,
+      closeStateFormModal,
+    };
   },
+  components: { FormModal, StateCard, StateFormModal },
 };
 </script>
 
