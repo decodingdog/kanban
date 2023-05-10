@@ -32,7 +32,13 @@ export default {
     "@nuxt/typescript-build",
     // https://go.nuxtjs.dev/vuetify
     "@nuxtjs/vuetify",
+    // auto style import
+    "@nuxtjs/style-resources",
   ],
+
+  styleResources: {
+    scss: ["~/assets/variables.scss"],
+  },
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [],
@@ -43,6 +49,15 @@ export default {
     theme: {
       dark: false,
       themes: {
+        light: {
+          primary: colors.blue.lighten2,
+          accent: colors.grey.lighten3,
+          secondary: colors.amber.lighten3,
+          info: colors.teal.base,
+          warning: colors.amber.base,
+          error: colors.deepOrange.accent1,
+          success: colors.green.accent2,
+        },
         dark: {
           primary: colors.blue.darken2,
           accent: colors.grey.darken3,

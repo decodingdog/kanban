@@ -2,3 +2,13 @@
 //
 // The variables you want to modify
 // $font-size-root: 20px;
+
+$high-color: #ff5100;
+$medium-color: #009063;
+$low-color: #ffe391;
+$none-color: #a8b3bc;
+
+@mixin level {
+  color: #fff;
+  text-align: center;
+}
