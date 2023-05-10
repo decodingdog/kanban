@@ -34,6 +34,7 @@ export default {
     "@nuxtjs/vuetify",
     // auto style import
     "@nuxtjs/style-resources",
+    "@nuxtjs/dotenv",
   ],
 
   styleResources: {
