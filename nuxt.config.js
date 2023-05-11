@@ -35,6 +35,7 @@ export default {
     // auto style import
     "@nuxtjs/style-resources",
     "@nuxtjs/dotenv",
+    "@nuxtjs/composition-api/module",
   ],
 
   styleResources: {
