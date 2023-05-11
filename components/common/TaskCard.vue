@@ -7,7 +7,7 @@
   >
     <v-row>
       <v-col>
-        <Level :value="'none'" />
+        <Level :value="task.level" />
       </v-col>
       <v-col>
         <v-spacer />
@@ -23,20 +23,26 @@
 </template>
 
 <script lang="ts">
-import { PropType, SetupContext, inject } from "vue";
+import { PropType, SetupContext } from "vue";
 import { EmitsOptions } from "vue/types/v3-setup-context";
+import { useContext } from "@nuxtjs/composition-api";
 
-import { PROVIDE_KEY } from "~/const";
 import Level from "./Level.vue";
-import { Task, MenuProvide, FormProvide } from "~/types";
-import { initialTask } from "~/data/task";
+import { Task } from "~/types";
+import { initialTask } from "~/data";
 
 interface ITaskCardProps {
+  stateKey: string;
   task: Task;
 }
 
 export default {
   props: {
+    stateKey: {
+      type: String,
+      default: "",
+      required: true,
+    },
     task: {
       type: Object as PropType<Task>,
       default() {
@@ -44,20 +50,26 @@ export default {
       },
     },
   },
-  setup({ task }: ITaskCardProps, { emit }: SetupContext<EmitsOptions>) {
-    const menuModal = inject<MenuProvide>(PROVIDE_KEY.menu);
-    const formModal = inject<FormProvide>(PROVIDE_KEY.form);
+  setup(
+    { stateKey, task }: ITaskCardProps,
+    { emit }: SetupContext<EmitsOptions>
+  ) {
+    const { store } = useContext();
 
     const onDragStart = () => {
       emit("on-selected-item");
     };
 
     const openMenuModal = () => {
-      menuModal?.open(task);
+      store.dispatch("modal/openMenuModal", { stateKey, task });
     };
 
     const openFormModal = () => {
-      formModal?.open("modify", task);
+      store.dispatch("modal/openFormModal", {
+        mode: "modify",
+        task,
+        stateKey,
+      });
     };
 
     return {

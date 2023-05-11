@@ -8,11 +8,7 @@
         <v-container>
           <v-row>
             <v-col cols="12">
-              <v-text-field
-                label="Title"
-                v-model="title"
-                required
-              ></v-text-field>
+              <v-text-field label="제목" v-model="title" required />
             </v-col>
           </v-row>
         </v-container>
@@ -31,8 +27,12 @@
 </template>
 
 <script lang="ts">
-import { SetupContext, ref } from "vue";
-import { EmitsOptions } from "vue/types/v3-setup-context";
+import { SetupContext, ref, watch } from "vue";
+import { useContext } from "@nuxtjs/composition-api";
+
+interface IStateFormModalProps {
+  visible: boolean;
+}
 
 export default {
   props: {
@@ -41,18 +41,32 @@ export default {
       default: false,
     },
   },
-  setup(props, { emit }: SetupContext<EmitsOptions>) {
+  setup(props: IStateFormModalProps, { emit }: SetupContext) {
+    const { store } = useContext();
     const title = ref<string>("");
 
-    const onDismiss = () => {
-      emit("on-dismiss");
-    };
+    // init
+    watch(props, (newVal) => {
+      if (!newVal.visible) {
+        title.value = "";
+      }
+    });
 
     const onSave = () => {
+      if (title.value === "") {
+        alert("제목을 입력해주요.");
+        return;
+      }
+      store.dispatch("kanban/addState", title.value);
+      onDismiss();
       emit("on-complete");
     };
 
-    return { title, onDismiss, onSave };
+    const onDismiss = () => {
+      store.dispatch("modal/closeStateFormModal");
+    };
+
+    return { title, onSave, onDismiss };
   },
 };
 </script>

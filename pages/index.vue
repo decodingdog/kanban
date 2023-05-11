@@ -2,7 +2,7 @@
   <v-row fluid :style="{ flexWrap: 'nowrap', overflowX: 'scroll' }">
     <v-col
       v-for="state in stateList"
-      :key="state.stateId"
+      :key="state.key"
       cols="12"
       sm="4"
       md="3"
@@ -12,6 +12,7 @@
         :state="state"
         @on-selected-item="onSelectedItem"
         @on-change-state="onChangeState"
+        @on-refresh="onRefresh"
       />
     </v-col>
     <v-col>
@@ -21,111 +22,118 @@
     </v-col>
     <StateFormModal
       :visible="stateFormModal.visible"
-      @on-dismiss="closeStateFormModal"
       @on-complete="completeStateFormModal"
+    />
+    <FormModal
+      :visible="formModal.visible"
+      :stateKey="formModal.stateKey"
+      :mode="formModal.mode"
+      :task="formModal.task"
+      @on-complete="completeFormModal"
+    />
+    <MenuModal
+      :visible="menuModal.visible"
+      :task="menuModal.task"
+      :stateKey="menuModal.stateKey"
+      @on-refresh="onRefresh"
     />
   </v-row>
 </template>
 
 <script lang="ts">
-import { reactive, ref } from "vue";
+import { ComputedRef, computed, reactive } from "vue";
+import { useContext } from "@nuxtjs/composition-api";
 
+import { initialTask } from "~/data";
 import { State, Task } from "~/types";
+import { Form, Menu, StateForm } from "~/types/modal";
+import { useStateListFetch } from "~/hooks";
 import StateCard from "~/components/common/StateCard.vue";
 import FormModal from "~/components/common/FormModal.vue";
 import StateFormModal from "~/components/common/StateFormModal.vue";
+import MenuModal from "~/components/common/MenuModal.vue";
 
 export default {
   setup() {
-    const selectedItem = ref<Task | null>(null);
-    const stateList = ref<State[]>([
-      {
-        stateId: 0,
-        stateNm: "Todo",
-        tasks: [
-          {
-            taskId: 0,
-            stateId: 0,
-            title: "안녕하세요",
-            cn: "안녕하세요.....",
-            registDt: "2022-03-10",
-          },
-          {
-            taskId: 1,
-            stateId: 0,
-            title: "안녕하세요",
-            cn: "안녕하세요.....",
-            registDt: "2022-03-10",
-          },
-        ],
-      },
-      {
-        stateId: 1,
-        stateNm: "In progress",
-        tasks: [],
-      },
-      {
-        stateId: 2,
-        stateNm: "Done",
-        tasks: [],
-      },
-      {
-        stateId: 3,
-        stateNm: "Test",
-        tasks: [],
-      },
-    ]);
-    const stateFormModal = reactive<{ visible: boolean }>({ visible: false });
+    const { store } = useContext();
+    const { $fetch } = useStateListFetch(store);
+    const formModal: ComputedRef<Form> = computed(() => store.state.modal.form);
+    const menuModal: ComputedRef<Menu> = computed(() => store.state.modal.menu);
+    const stateFormModal: ComputedRef<StateForm> = computed(
+      () => store.state.modal.stateForm
+    );
 
-    const onSelectedItem = (task: Task) => {
-      selectedItem.value = task;
-    };
+    const stateList: ComputedRef<State[]> = computed(
+      () => store.state.kanban.stateList
+    );
+    const selectedItem = reactive<{ key: string; task: Task }>({
+      key: "",
+      task: initialTask,
+    });
 
-    const onChangeState = (nextStateId: number) => {
-      if (selectedItem.value?.stateId === nextStateId) return;
-
-      stateList.value = stateList.value.map((state: State) => {
-        let tasks = state.tasks;
-
-        if (selectedItem.value?.stateId === state.stateId) {
-          tasks = state.tasks.filter(
-            (task: Task) => selectedItem.value?.taskId !== task.taskId
-          );
-        } else if (nextStateId === state.stateId) {
-          tasks = [
-            ...state.tasks,
-            { ...selectedItem.value, stateId: state.stateId } as Task,
-          ];
-        }
-
-        return { ...state, tasks };
-      });
-      selectedItem.value = null;
+    const onRefresh = () => {
+      $fetch();
     };
 
     const openStateFormModal = () => {
-      stateFormModal.visible = true;
-    };
-
-    const completeStateFormModal = () => {
-      // refresh state list
+      store.dispatch("modal/openStateFormModal");
     };
 
     const closeStateFormModal = () => {
-      stateFormModal.visible = false;
+      store.dispatch("modal/closeStateFormModal");
+    };
+
+    const completeStateFormModal = () => {
+      closeStateFormModal();
+      onRefresh();
+    };
+
+    const completeFormModal = () => {
+      store.dispatch("modal/closeFormModal");
+      onRefresh();
+    };
+
+    const onSelectedItem = ({ key, task }: { key: string; task: Task }) => {
+      selectedItem.key = key;
+      selectedItem.task = task;
+    };
+
+    const onChangeState = async (nextKey: string) => {
+      if (nextKey === selectedItem.key) return;
+
+      // add task
+      await store.dispatch("kanban/addTask", {
+        key: nextKey,
+        task: selectedItem.task,
+      });
+
+      // delete task
+      await store.dispatch("kanban/delTask", {
+        key: selectedItem.key,
+        task: selectedItem.task,
+      });
+
+      // init
+      selectedItem.key = "";
+      selectedItem.task = initialTask;
+      onRefresh();
     };
 
     return {
       stateList,
+      menuModal,
+      formModal,
       stateFormModal,
+      openStateFormModal,
+      closeStateFormModal,
+      completeStateFormModal,
+      completeFormModal,
+      onRefresh,
       onChangeState,
       onSelectedItem,
-      openStateFormModal,
-      completeStateFormModal,
-      closeStateFormModal,
     };
   },
-  components: { FormModal, StateCard, StateFormModal },
+  components: { FormModal, StateCard, StateFormModal, MenuModal },
 };
 </script>
 

@@ -1,39 +1,21 @@
 export type TLevel = "high" | "medium" | "low" | "none";
 
 export interface Task {
-  taskId: number;
   title: string;
   cn: string;
+  level: TLevel;
   registDt: string;
 }
 
 export interface State {
-  stateId: number;
+  key: string;
   stateNm: string;
   tasks: Task[];
-  order: number;
   registDt: string;
 }
 
-export type TMode = "regist" | "modify";
-
-export interface IFormModalProps {
-  visible: boolean;
-  mode: TMode;
-  task: Task;
-}
-
-export interface IMenuModalProps {
-  visible: boolean;
-  task: Task;
-}
-
-export interface MenuProvide extends IMenuModalProps {
-  open: (task: Task) => void;
-  close: () => void;
-}
-
-export interface FormProvide extends IFormModalProps {
-  open: (mode: TMode, task: Task) => void;
-  close: () => void;
+export interface User {
+  key: string;
+  email: string;
+  title: string;
 }

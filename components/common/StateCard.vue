@@ -9,7 +9,7 @@
     <v-card-title :style="{ color: '#878787' }">
       <span>{{ state.stateNm }}</span>
       <v-spacer />
-      <v-icon @click="delStatus">mdi-close</v-icon>
+      <v-icon @click="delState">mdi-close</v-icon>
     </v-card-title>
     <v-btn class="add-btn" @click="addTask">
       <v-icon>mdi-add</v-icon>
@@ -17,20 +17,21 @@
     </v-btn>
     <TaskCard
       v-for="task in state.tasks"
-      :key="`${state.stateId}_${task.taskId}`"
+      :key="`${state.key}_${task.registDt}`"
+      :stateKey="state.key"
       :task="task"
-      @on-selected-item="handleSelectedItem(task)"
+      @on-selected-item="handleSelectedItem(state.key, task)"
     />
   </v-card>
 </template>
 
 <script lang="ts">
-import { PropType, SetupContext, inject } from "vue";
+import { PropType, SetupContext } from "vue";
 import { EmitsOptions } from "vue/types/v3-setup-context";
+import { useContext } from "@nuxtjs/composition-api";
 
-import { PROVIDE_KEY } from "~/const";
-import { FormProvide, State, Task } from "~/types";
-import { initialTask, initialState } from "~/data/task";
+import { State, Task } from "~/types";
+import { initialTask, initialState } from "~/data";
 import TaskCard from "./TaskCard.vue";
 
 interface IStateCardProps {
@@ -46,28 +47,32 @@ export default {
     },
   },
   setup({ state }: IStateCardProps, { emit }: SetupContext<EmitsOptions>) {
-    const formModal = inject<FormProvide>(PROVIDE_KEY.form);
-
-    const delStatus = () => {
-      if (!confirm("삭제하시겠습니까?")) return;
-
-      console.log(state.stateId);
-      console.log("delete status");
-    };
+    const { store } = useContext();
 
     const addTask = () => {
-      formModal?.open("regist", initialTask);
+      store.dispatch("modal/openFormModal", {
+        mode: "regist",
+        stateKey: state.key,
+        task: initialTask,
+      });
     };
 
     const onDrop = () => {
-      emit("on-change-state", state.stateId);
+      emit("on-change-state", state.key);
     };
 
-    const handleSelectedItem = (task: Task) => {
-      emit("on-selected-item", task);
+    const handleSelectedItem = (key: string, task: Task) => {
+      emit("on-selected-item", { key, task });
     };
 
-    return { delStatus, addTask, onDrop, handleSelectedItem };
+    const delState = async () => {
+      if (!confirm("삭제하시겠습니까?")) return;
+
+      await store.dispatch("kanban/delState", state.key);
+      emit("on-refresh");
+    };
+
+    return { addTask, onDrop, handleSelectedItem, delState };
   },
   components: { TaskCard },
 };

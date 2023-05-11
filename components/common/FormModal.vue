@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="visible" persistent width="1024">
+  <v-dialog :value="visible" persistent width="1024">
     <v-card>
       <v-card-title>
         <span class="text-h5">New Task</span>
@@ -11,14 +11,19 @@
               <v-select
                 :items="['none', 'low', 'medium', 'high']"
                 label="Level"
+                v-model="form.level"
                 required
               ></v-select>
             </v-col>
             <v-col cols="12">
-              <v-text-field label="Title*" required></v-text-field>
+              <v-text-field
+                label="Title*"
+                v-model="form.title"
+                required
+              ></v-text-field>
             </v-col>
             <v-col cols="12">
-              <v-textarea label="Desription" />
+              <v-textarea label="Desription" v-model="form.cn" />
             </v-col>
           </v-row>
         </v-container>
@@ -38,12 +43,21 @@
 </template>
 
 <script lang="ts">
-import { PropType, SetupContext } from "vue";
-import { EmitsOptions } from "vue/types/v3-setup-context";
-import { initialTask } from "~/data/task";
-import { TMode, Task, IFormModalProps } from "~/types";
+import { PropType, SetupContext, watch, reactive, computed } from "vue";
+import { defineComponent, useContext } from "@nuxtjs/composition-api";
 
-export default {
+import { initialTask } from "~/data";
+import { Task } from "~/types";
+import { TMode } from "~/types/modal";
+
+interface IFormModalProps {
+  visible: boolean;
+  mode: TMode;
+  stateKey: string;
+  task: Task;
+}
+
+export default defineComponent({
   props: {
     visible: {
       type: Boolean,
@@ -55,32 +69,55 @@ export default {
       default: "regist",
       required: true,
     },
+    stateKey: {
+      type: String,
+      default: "",
+      required: true,
+    },
     task: {
       type: Object as PropType<Task>,
-      default() {
-        return initialTask;
-      },
+      default: initialTask,
     },
   },
-  setup({ mode, task }: IFormModalProps, { emit }: SetupContext<EmitsOptions>) {
-    const onSave = () => {
-      console.log(mode);
-      console.log(task);
+  setup(props: IFormModalProps, { emit }: SetupContext) {
+    let form = reactive<Task>(props.task);
+    const key = computed(() => props.stateKey);
+    const { store } = useContext();
 
-      if (mode === "regist") {
-      } else {
+    watch(props, (newVal) => {
+      if (newVal.visible) {
+        form.title = newVal.task.title;
+        form.cn = newVal.task.cn;
+        form.registDt = newVal.task.registDt;
+        form.level = newVal.task.level;
+      }
+    });
+
+    const onSave = async () => {
+      if (form.title === "") {
+        alert("제목을 입력해주세요.");
+        return;
       }
 
-      onDismiss();
+      if (props.mode === "regist") {
+        await store.dispatch("kanban/addTask", { key: key.value, task: form });
+      } else {
+        await store.dispatch("kanban/updaetTask", {
+          key: key.value,
+          task: form,
+        });
+      }
+
+      emit("on-complete");
     };
 
     const onDismiss = () => {
-      emit("on-dismiss");
+      store.dispatch("modal/closeFormModal");
     };
 
-    return { onSave, onDismiss };
+    return { form, onSave, onDismiss };
   },
-};
+});
 </script>
 
 <style lang=""></style>

@@ -1,29 +1,36 @@
 <template>
-  <v-dialog v-model="visible" width="auto">
+  <v-dialog :value="visible" width="auto">
     <v-card>
       <v-card-title> Dialog 1 </v-card-title>
-      <v-card-text>
+      <!-- <v-card-text>
         <v-btn color="primary" class="ma-2" @click="openLevelModal">
           Set Level
         </v-btn>
-      </v-card-text>
+      </v-card-text> -->
       <v-card-text>
-        <v-btn color="primary" class="ma-2" @click="onDelete">
+        <v-btn color="primary" class="ma-2" @click="delTask">
           Delete Task
         </v-btn>
       </v-card-text>
       <v-card-actions>
-        <v-btn variant="text" @click="$emit('on-dismiss')"> Close </v-btn>
+        <v-btn variant="text" @click="onDismiss"> Close </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 
 <script lang="ts">
-import { ref, PropType } from "vue";
-import { initialTask } from "~/data/task";
+import { ref, PropType, SetupContext, computed } from "vue";
+import { initialTask } from "~/data";
 
 import { Task } from "~/types";
+import { useContext } from "@nuxtjs/composition-api";
+
+interface IMenuModalProps {
+  visible: boolean;
+  task: Task;
+  stateKey: string;
+}
 
 export default {
   props: {
@@ -37,23 +44,39 @@ export default {
         return initialTask;
       },
     },
+    stateKey: {
+      type: String,
+      default: "",
+    },
   },
-  setup() {
+  setup(props: IMenuModalProps, { emit }: SetupContext) {
     const visible = ref<boolean>(false);
+    const { store } = useContext();
+    const key = computed(() => props.stateKey);
 
     const openLevelModal = () => {
       visible.value = true;
+      onDismiss();
     };
 
     const closeLevelModal = () => {
       visible.value = false;
     };
 
-    const onDelete = () => {
-      console.log("delte task");
+    const delTask = async () => {
+      await store.dispatch("kanban/delTask", {
+        key: key.value,
+        task: props.task,
+      });
+      emit("on-refresh");
+      onDismiss();
     };
 
-    return { onDelete, openLevelModal, closeLevelModal };
+    const onDismiss = () => {
+      store.dispatch("modal/closeMenuModal");
+    };
+
+    return { delTask, openLevelModal, closeLevelModal, onDismiss };
   },
 };
 </script>
