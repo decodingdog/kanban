@@ -47,7 +47,7 @@ import { useContext } from "@nuxtjs/composition-api";
 import { initialTask } from "~/data";
 import { State, Task } from "~/types";
 import { Form, Menu, StateForm } from "~/types/modal";
-import { useStateListFetch } from "~/hooks";
+import { useStateListFetch } from "~/hooks/useStateListFetch";
 import StateCard from "~/components/common/StateCard.vue";
 import FormModal from "~/components/common/FormModal.vue";
 import StateFormModal from "~/components/common/StateFormModal.vue";
