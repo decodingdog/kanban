@@ -76,6 +76,10 @@ export default {
     };
 
     const openStateFormModal = () => {
+      if (stateList.value.length === 5) {
+        alert("열은 총 5개까지만 만들 수 있습니다.");
+        return;
+      }
       store.dispatch("modal/openStateFormModal");
     };
 
