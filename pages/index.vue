@@ -97,11 +97,20 @@ export default {
       onRefresh();
     };
 
+    /**
+     *
+     * @param { key, task }
+     * key: 현재 drag된 task의 State document key, task: drag된 task 정보
+     */
     const onSelectedItem = ({ key, task }: { key: string; task: Task }) => {
       selectedItem.key = key;
       selectedItem.task = task;
     };
 
+    /**
+     *
+     * @param nextKey drop된 State의 document key
+     */
     const onChangeState = async (nextKey: string) => {
       if (nextKey === selectedItem.key) return;
 

@@ -6,6 +6,11 @@ import { RootState } from "~/store";
 import { State } from "~/types";
 import { db } from "~/utils/firebase";
 
+/**
+ *
+ * @param store
+ * @returns
+ */
 export const useStateListFetch = (store: Store<RootState>) => {
   return useFetch(async () => {
     const getStateList = async () => {
