@@ -44,7 +44,7 @@
 
 <script lang="ts">
 import { PropType, SetupContext, watch, reactive, computed } from "vue";
-import { defineComponent, useContext } from "@nuxtjs/composition-api";
+import { useContext } from "@nuxtjs/composition-api";
 
 import { initialTask } from "~/data";
 import { Task } from "~/types";
@@ -57,7 +57,7 @@ interface IFormModalProps {
   task: Task;
 }
 
-export default defineComponent({
+export default {
   props: {
     visible: {
       type: Boolean,
@@ -117,7 +117,7 @@ export default defineComponent({
 
     return { form, onSave, onDismiss };
   },
-});
+};
 </script>
 
 <style lang=""></style>
