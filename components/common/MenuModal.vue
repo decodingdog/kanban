@@ -2,11 +2,6 @@
   <v-dialog :value="visible" width="auto">
     <v-card>
       <v-card-title> Dialog 1 </v-card-title>
-      <!-- <v-card-text>
-        <v-btn color="primary" class="ma-2" @click="openLevelModal">
-          Set Level
-        </v-btn>
-      </v-card-text> -->
       <v-card-text>
         <v-btn color="primary" class="ma-2" @click="delTask">
           Delete Task
@@ -20,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import { ref, PropType, SetupContext, computed } from "vue";
+import { PropType, SetupContext, computed } from "vue";
 import { initialTask } from "~/data";
 
 import { Task } from "~/types";
@@ -50,18 +45,8 @@ export default {
     },
   },
   setup(props: IMenuModalProps, { emit }: SetupContext) {
-    const visible = ref<boolean>(false);
     const { store } = useContext();
     const key = computed(() => props.stateKey);
-
-    const openLevelModal = () => {
-      visible.value = true;
-      onDismiss();
-    };
-
-    const closeLevelModal = () => {
-      visible.value = false;
-    };
 
     const delTask = async () => {
       await store.dispatch("kanban/delTask", {
@@ -76,7 +61,7 @@ export default {
       store.dispatch("modal/closeMenuModal");
     };
 
-    return { delTask, openLevelModal, closeLevelModal, onDismiss };
+    return { delTask, onDismiss };
   },
 };
 </script>
