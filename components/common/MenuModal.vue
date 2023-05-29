@@ -1,7 +1,8 @@
+<!-- Task Option Menu Component  -->
 <template>
   <v-dialog :value="visible" width="auto">
     <v-card>
-      <v-card-title> Dialog 1 </v-card-title>
+      <v-card-title>Menu</v-card-title>
       <v-card-text>
         <v-btn color="primary" class="ma-2" @click="delTask">
           Delete Task

@@ -1,3 +1,4 @@
+<!-- Task Level Component : value 별 색상 및 제목 출력 -->
 <template>
   <div :class="`level-${value} rounded-pill`">
     <span>{{ capitalize(value) }}</span>

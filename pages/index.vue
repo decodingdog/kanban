@@ -15,11 +15,13 @@
         @on-refresh="onRefresh"
       />
     </v-col>
+
     <v-col>
       <button @click="openStateFormModal">
         <v-icon>mdi-plus-circle</v-icon>
       </button>
     </v-col>
+
     <StateFormModal
       :visible="stateFormModal.visible"
       @on-complete="completeStateFormModal"
@@ -71,10 +73,12 @@ export default {
       task: initialTask,
     });
 
+    // State 목록 갱신 함수
     const onRefresh = () => {
       $fetch();
     };
 
+    // State 생성 모달 오픈 함수
     const openStateFormModal = () => {
       if (stateList.value.length === 5) {
         alert("열은 총 5개까지만 만들 수 있습니다.");
@@ -83,15 +87,18 @@ export default {
       store.dispatch("modal/openStateFormModal");
     };
 
+    // State 생성 모달 닫기 함수
     const closeStateFormModal = () => {
       store.dispatch("modal/closeStateFormModal");
     };
 
+    // State 생성 모달에서 State가 생성되었을 때 호출되는 함수
     const completeStateFormModal = () => {
       closeStateFormModal();
       onRefresh();
     };
 
+    // Task 생성/수정 모달에서 Task가 생성 및 수정되었을 때 호출되는 함수
     const completeFormModal = () => {
       store.dispatch("modal/closeFormModal");
       onRefresh();

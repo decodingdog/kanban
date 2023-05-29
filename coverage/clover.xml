@@ -1,10 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1683318499424" clover="3.2.0">
-  <project timestamp="1683318499424" name="All files">
-    <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0" elements="1" coveredelements="0" complexity="0" loc="1" ncloc="1" packages="1" files="1" classes="1"/>
-    <file name="index.vue" path="/Users/kimhaeji/Documents/develop/giggals/kanban-web/pages/index.vue">
-      <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-      <line num="80" count="0" type="stmt"/>
-    </file>
+<coverage generated="1683964914335" clover="3.2.0">
+  <project timestamp="1683964914335" name="All files">
+    <metrics statements="37" coveredstatements="15" conditionals="10" coveredconditionals="4" methods="6" coveredmethods="3" elements="53" coveredelements="22" complexity="0" loc="37" ncloc="37" packages="5" files="13" classes="13"/>
+    <package name="components.common">
+      <metrics statements="15" coveredstatements="1" conditionals="4" coveredconditionals="0" methods="2" coveredmethods="0"/>
+      <file name="FormModal.vue" path="/Users/kimhaeji/Documents/develop/giggals/kanban-web/components/common/FormModal.vue">
+        <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+      </file>
+      <file name="Level.vue" path="/Users/kimhaeji/Documents/develop/giggals/kanban-web/components/common/Level.vue">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="11" count="1" type="stmt"/>
+      </file>
+      <file name="MenuModal.vue" path="/Users/kimhaeji/Documents/develop/giggals/kanban-web/components/common/MenuModal.vue">
+        <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+      </file>
+      <file name="StateCard.vue" path="/Users/kimhaeji/Documents/develop/giggals/kanban-web/components/common/StateCard.vue">
+        <metrics statements="3" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="35" count="0" type="cond" truecount="0" falsecount="2"/>
+      </file>
+      <file name="StateFormModal.vue" path="/Users/kimhaeji/Documents/develop/giggals/kanban-web/components/common/StateFormModal.vue">
+        <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+      </file>
+      <file name="TaskCard.vue" path="/Users/kimhaeji/Documents/develop/giggals/kanban-web/components/common/TaskCard.vue">
+        <metrics statements="3" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="32" count="0" type="cond" truecount="0" falsecount="2"/>
+      </file>
+    </package>
+    <package name="components.layouts.default">
+      <metrics statements="3" coveredstatements="3" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
+      <file name="AppBar.vue" path="/Users/kimhaeji/Documents/develop/giggals/kanban-web/components/layouts/default/AppBar.vue">
+        <metrics statements="2" coveredstatements="2" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
+        <line num="18" count="2" type="stmt"/>
+        <line num="20" count="4" type="cond" truecount="2" falsecount="0"/>
+      </file>
+      <file name="AppBarTitle.vue" path="/Users/kimhaeji/Documents/develop/giggals/kanban-web/components/layouts/default/AppBarTitle.vue">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="16" count="3" type="stmt"/>
+      </file>
+    </package>
+    <package name="layouts">
+      <metrics statements="4" coveredstatements="4" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
+      <file name="default.vue" path="/Users/kimhaeji/Documents/develop/giggals/kanban-web/layouts/default.vue">
+        <metrics statements="2" coveredstatements="2" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="17" count="2" type="cond" truecount="2" falsecount="0"/>
+      </file>
+      <file name="error.vue" path="/Users/kimhaeji/Documents/develop/giggals/kanban-web/layouts/error.vue">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="pages">
+      <metrics statements="8" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
+      <file name="index.vue" path="/Users/kimhaeji/Documents/develop/giggals/kanban-web/pages/index.vue">
+        <metrics statements="8" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="56" count="0" type="cond" truecount="0" falsecount="2"/>
+      </file>
+    </package>
+    <package name="utils">
+      <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+      <file name="firebase.ts" path="/Users/kimhaeji/Documents/develop/giggals/kanban-web/utils/firebase.ts">
+        <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+      </file>
+      <file name="string.ts" path="/Users/kimhaeji/Documents/develop/giggals/kanban-web/utils/string.ts">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="6" count="2" type="stmt"/>
+        <line num="7" count="5" type="stmt"/>
+      </file>
+    </package>
   </project>
 </coverage>

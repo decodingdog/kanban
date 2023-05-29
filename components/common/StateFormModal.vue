@@ -57,8 +57,8 @@ export default {
         alert("제목을 입력해주요.");
         return;
       }
+
       store.dispatch("kanban/addState", title.value);
-      onDismiss();
       emit("on-complete");
     };
 

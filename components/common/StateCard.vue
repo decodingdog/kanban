@@ -1,3 +1,4 @@
+<!-- Progress State Card Component -->
 <template>
   <v-card
     color="#EEEEEE"
