@@ -16,13 +16,19 @@
       <v-icon>mdi-add</v-icon>
       <span>Add task</span>
     </v-btn>
-    <TaskCard
-      v-for="task in state.tasks"
-      :key="`${state.key}_${task.registDt}`"
-      :stateKey="state.key"
-      :task="task"
-      @on-selected-item="handleSelectedItem(state.key, task)"
-    />
+    <v-row class="mt-3">
+      <v-col
+        cols="12"
+        v-for="task in state.tasks"
+        :key="`${state.key}_${task.registDt}`"
+      >
+        <TaskCard
+          :stateKey="state.key"
+          :task="task"
+          @on-selected-item="handleSelectedItem(state.key, task)"
+        />
+      </v-col>
+    </v-row>
   </v-card>
 </template>
 

@@ -5,15 +5,20 @@ import { State, Task } from "~/types";
 
 export interface KanbanState {
   stateList: State[];
+  isDraggable: boolean;
 }
 
 export const state = (): KanbanState => ({
   stateList: [],
+  isDraggable: true,
 });
 
 export const mutations = {
   setStateList(state: KanbanState, stateList: State[]) {
     state.stateList = stateList;
+  },
+  setDraggable(state: KanbanState, isDraggable: boolean) {
+    state.isDraggable = isDraggable;
   },
 };
 
@@ -35,14 +40,27 @@ export const actions = {
     return success;
   },
   async updaetTask(
-    {}: ActionContext,
+    { commit }: ActionContext,
     { key, task }: { key: string; task: Task }
   ) {
+    // 데이터 업데이트되는 동안 Task Card 가 drag 되지않도록 정지
+    commit("setDraggable", false);
     const { success } = await TASK.updaetTask(key, task);
+    if (success) {
+      commit("setDraggable", true);
+    }
     return success;
   },
-  async delTask({}: ActionContext, { key, task }: { key: string; task: Task }) {
+  async delTask(
+    { commit }: ActionContext,
+    { key, task }: { key: string; task: Task }
+  ) {
+    // 데이터 업데이트되는 동안 Task Card 가 drag 되지않도록 정지
+    commit("setDraggable", false);
     const { success } = await TASK.delTask(key, task);
+    if (success) {
+      commit("setDraggable", true);
+    }
     return success;
   },
 };

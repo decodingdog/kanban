@@ -1,8 +1,8 @@
 <!-- Taks 정보 Card Component -->
 <template>
   <v-card
-    class="my-5 px-3 rounded-lg"
-    draggable="true"
+    class="px-3 rounded-lg"
+    :draggable="isDraggable"
     @dragstart="onDragStart"
     @click="openFormModal"
   >
@@ -14,9 +14,9 @@
         <v-spacer />
       </v-col>
       <v-col>
-        <v-icon class="float-right" @click.stop="openMenuModal"
-          >mdi-dots-horizontal</v-icon
-        >
+        <v-icon class="float-right" @click.stop="openMenuModal">
+          mdi-dots-horizontal
+        </v-icon>
       </v-col>
     </v-row>
     <v-card-title css="task-title">{{ task.title }}</v-card-title>
@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { PropType, SetupContext } from "vue";
+import { PropType, SetupContext, computed } from "vue";
 import { EmitsOptions } from "vue/types/v3-setup-context";
 import { useContext } from "@nuxtjs/composition-api";
 
@@ -56,6 +56,7 @@ export default {
     { emit }: SetupContext<EmitsOptions>
   ) {
     const { store } = useContext();
+    const isDraggable = computed(() => store.state.kanban.isDraggable);
 
     /**
      * drag 처음 감지 되었을때 호출되는 함수
@@ -86,6 +87,7 @@ export default {
     };
 
     return {
+      isDraggable,
       onDragStart,
       openMenuModal,
       openFormModal,
