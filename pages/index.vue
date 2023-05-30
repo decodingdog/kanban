@@ -68,6 +68,7 @@ export default {
     const stateList: ComputedRef<State[]> = computed(
       () => store.state.kanban.stateList
     );
+
     const selectedItem = reactive<{ key: string; task: Task }>({
       key: "",
       task: initialTask,

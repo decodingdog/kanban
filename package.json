@@ -12,7 +12,8 @@
     "lint": "yarn lint:js && yarn lint:prettier --ignore-path .eslintignore .",
     "lintfix": "prettier --write --list-different . && yarn lint:js --fix",
     "test": "jest --watchAll",
-    "coverage": "jest --coverage"
+    "coverage": "jest --coverage",
+    "deploy": "firebase deploy"
   },
   "dependencies": {
     "@nuxtjs/composition-api": "^0.33.1",
